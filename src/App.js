@@ -1,6 +1,15 @@
-import './App.css'
+import {Route, Switch} from 'react-router-dom/cjs/react-router-dom.min'
+import Header from './Header'
+import './index.css'
+import Home from './Home'
 
-//write your code here
-const App = () => <div>Hello World</div>
+const App = () => (
+  <div className="max-w-7xl mx-auto">
+    <Header />
+    <Switch>
+      <Route exact path="/*" component={Home} />
+    </Switch>
+  </div>
+)
 
 export default App
