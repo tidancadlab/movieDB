@@ -15,8 +15,8 @@ const Header = () => (
           <Link to="order" className="flex gap-2 items-center">
             <p className="text-sm">My Orders</p>
             <div className="relative">
-              <IoCartOutline className="text-lg" />
-              <p className="absolute -top-2.5 -right-1.5 flex justify-center items-center text-[10px] rounded-full bg-orange-300 px-1">
+              <IoCartOutline className="text-xl" />
+              <p className="absolute -top-2.5 -right-1.5 px-1 flex justify-center items-center text-[12px] rounded-full bg-orange-600 text-white leading-4">
                 {total}
               </p>
             </div>

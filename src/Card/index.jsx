@@ -1,3 +1,4 @@
+import {FiPlus, FiMinus} from 'react-icons/fi'
 import CartContext from '../Context'
 
 const nonVeg =
@@ -24,10 +25,10 @@ const Card = ({item}) => (
       }
       return (
         <div className="flex gap-2 justify-between p-2 border border-black rounded-md m-2">
-          <div className="flex sm:flex-row flex-col sm:gap-4 align-top">
+          <div className="flex sm:flex-row flex-col sm:gap-1 align-top">
             <div>
               <img
-                className="sm:min-w-[48px] max-w-6"
+                className="sm:min-w-[24px] max-w-6 mt-1"
                 src={item.dish_Type === 1 ? nonVeg : veg}
                 alt="dish type"
               />
@@ -41,21 +42,23 @@ const Card = ({item}) => (
                 {item.dish_description}
               </p>
               {item.dish_Availability ? (
-                <div className="flex gap-6 items-center justify-center max-w-fit px-6 py-0.5 rounded-full mt-4 text-white text-lg bg-green-600">
+                <div className="flex gap-2 items-center justify-center max-w-fit rounded-full mt-2 text-white bg-green-600">
                   <button
                     onClick={onDecrese}
                     aria-labelledby="text"
                     type="button"
+                    className="px-3 py-3 rounded-l-full active:bg-green-700/60"
                   >
-                    -
+                    <FiMinus />
                   </button>
                   <p>{quantity}</p>
                   <button
                     onClick={onIncrese}
                     aria-labelledby="text"
                     type="button"
+                    className="px-3 py-3 rounded-r-full active:bg-green-700/60"
                   >
-                    +
+                    <FiPlus />
                   </button>
                 </div>
               ) : (
