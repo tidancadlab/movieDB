@@ -25,7 +25,7 @@ const Home = () => {
       )
       if (response.ok) {
         const data = await response.json()
-        setItems(data)
+        setItems(data[0].table_menu_list)
         setApiStatus(apiStatusConstants.success)
       } else {
         setApiStatus(apiStatusConstants.failure)
@@ -38,11 +38,7 @@ const Home = () => {
   useEffect(onData, [])
 
   const GettingData = () =>
-    apiStatus === apiStatusConstants.inProgress ? (
-      <div className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
-        <Loader color="orange" type="TailSpin" />
-      </div>
-    ) : (
+    apiStatus === apiStatusConstants.failure ? (
       <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
         <div className="text-center">
           <p className="text-7xl font-semibold text-indigo-600">404</p>
@@ -63,26 +59,26 @@ const Home = () => {
           </div>
         </div>
       </main>
+    ) : (
+      <div className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
+        <Loader color="orange" type="TailSpin" />
+      </div>
     )
 
   return (
     <div>
-      {items.length > 0 ? (
-        <>
-          <Menu
-            items={items[0].table_menu_list}
-            onCategory={onCategory}
-            category={category}
-          />
+      <>
+        <Menu items={items} onCategory={onCategory} category={category} />
+        {items.length > 0 ? (
           <div>
-            {items[0].table_menu_list[category].category_dishes.map(v => (
+            {items[category].category_dishes.map(v => (
               <Card key={v.dish_id} item={v} />
             ))}
           </div>
-        </>
-      ) : (
-        <GettingData />
-      )}
+        ) : (
+          <GettingData />
+        )}
+      </>
     </div>
   )
 }
