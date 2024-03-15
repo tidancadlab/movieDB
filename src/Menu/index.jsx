@@ -12,7 +12,7 @@ const Menu = ({items, onCategory, category}) => (
           type="button"
           onClick={() => onCategory(i)}
           data-active={i === category}
-          className="px-4 py-2 data-[active=true]:text-secondary border-b-2 border-transparent data-[active=true]:border-secondary text-nowrap"
+          className="px-4 py-2 data-[active=true]:text-secondary hover:text-secondary/70 border-b-2 border-transparent data-[active=true]:border-secondary text-nowrap ease-in-out duration-200"
         >
           {v.menu_category}
         </button>
