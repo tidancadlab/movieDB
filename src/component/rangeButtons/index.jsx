@@ -43,7 +43,7 @@ const RangeButton = ({items, queryParams, className}) => (
       <Link
         to={{
           search: `${
-            useQuery().get('movie') ? `movie=${  useQuery().get('movie')}&` : ''
+            useQuery().get('movie') ? `movie=${useQuery().get('movie')}&` : ''
           }page=${items.page + 1}`,
         }}
         className='border-2 border-white rounded p-2 group-disabled:opacity-25 group-disabled:pointer-events-none'
