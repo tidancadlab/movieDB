@@ -1,55 +1,101 @@
-import Cookies from 'js-cookie'
-import {Link, withRouter} from 'react-router-dom'
-import {IoCartOutline} from 'react-icons/io5'
-import {HiLogout} from 'react-icons/hi'
-import context from '../../Context'
+import React, {useEffect, useState} from 'react'
+import {BsSearch} from 'react-icons/bs'
+import {Link, withRouter, matchPath} from 'react-router-dom'
+import {useLocation} from 'react-router-dom/cjs/react-router-dom.min'
+
+function useQuery() {
+  const {search} = useLocation()
+
+  return React.useMemo(() => new URLSearchParams(search), [search])
+}
+
+const tabes = [
+  {
+    id: 1,
+    title: 'Popular',
+    url: '/',
+  },
+  {
+    id: 2,
+    title: 'Top Rated',
+    url: '/top-rated',
+  },
+  {
+    id: 3,
+    title: 'Upcoming',
+    url: '/upcoming',
+  },
+]
 
 const Header = ({history}) => {
-  const onLogout = () => {
-    Cookies.remove('jwt_token')
-    history.replace('/login')
+  const queryParams = useQuery()
+  const search = queryParams.get('movie') || ''
+  const [movieName, setMovieName] = useState(search)
+  const isCurrentTab = path =>
+    matchPath(history.location.pathname, {
+      path,
+      exact: true,
+      strict: true,
+    })?.isExact
+  const onSearchMovie = e => {
+    setMovieName(e.target.value)
   }
+  useEffect(() => {
+    setMovieName(search)
+  }, [search])
   return (
-    <context.Consumer>
-      {data => {
-        const {cartList} = data
-        const total = cartList.length
-        return (
-          <nav className='flex justify-between p-2 mx-auto border-b border-black w-full gap-4'>
-            <h3 className='font-bold text-lg grow'>
-              <Link to='/'>UNI Resto Cafe</Link>
-            </h3>
-            <button type='button' data-testid='cart'>
-              <Link to='/cart' className='flex gap-2 items-center'>
-                <p className='text-sm hidden sm:inline'>My Orders</p>
-                <div className='relative'>
-                  <IoCartOutline className='text-xl' />
-                  <p className='absolute -top-2.5 -right-1.5 px-1 flex justify-center items-center text-[12px] rounded-full bg-orange-600 text-white leading-4'>
-                    {total}
-                  </p>
-                </div>
-              </Link>
-            </button>
-            <button
-              onClick={onLogout}
-              type='button'
-              aria-labelledby='logout'
-              className='text-xl sm:hidden'
-            >
-              <HiLogout />
-            </button>
-            <button
-              onClick={onLogout}
-              type='button'
-              aria-labelledby='logout'
-              className='bg-black text-sm px-2 py-0.5 rounded-md text-white hidden sm:inline'
-            >
-              Logout
-            </button>
-          </nav>
-        )
-      }}
-    </context.Consumer>
+    <nav className='flex flex-wrap min-[380px]:flex-row justify-between p-2 text-white w-full gap-4 z-50'>
+      <h3 className='font-bold text-3xl text-start min-[380px]:text-center'>
+        <Link className='font-mono px-6 py-2' to='/'>
+          movieDB
+        </Link>
+      </h3>
+      <div className=' order-3 sm:order-2 grow flex justify-evenly sm:justify-end gap-8 *:font-semibold *:text-gray-400'>
+        {tabes.map(v => (
+          <button
+            key={v.id}
+            type='button'
+            aria-current={isCurrentTab(v.url)}
+            className='hover:text-white aria-[current=true]:text-white'
+          >
+            <Link to={v.url} className='flex gap-2 items-center'>
+              {v.title}
+            </Link>
+          </button>
+        ))}
+      </div>
+      <form
+        onSubmit={e => {
+          e.preventDefault()
+        }}
+        className='outline outline-black outline-2 rounded-md flex sm:order-3 grow'
+      >
+        <input
+          type='text'
+          placeholder='Search'
+          className='outline-none py-1 px-3 bg-gray-900 grow'
+          spellCheck={false}
+          onChange={onSearchMovie}
+          value={movieName}
+        />
+        <button
+          aria-labelledby='search'
+          disabled={movieName.length <= 0}
+          type='button'
+          className='bg-black text-white flex items-center justify-center group'
+        >
+          <Link
+            className='px-4 py-3 group-disabled:pointer-events-none'
+            to={{
+              pathname: '/search',
+              search: `movie=${movieName}`,
+            }}
+          >
+            <BsSearch />
+          </Link>
+        </button>
+      </form>
+    </nav>
   )
 }
 export default withRouter(Header)

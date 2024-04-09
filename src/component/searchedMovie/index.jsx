@@ -16,16 +16,18 @@ const apiStatusConstants = {
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
 }
-const Home = () => {
+const SearchedMovies = () => {
   const [items, setItems] = useState({results: [], totalPages: 0, page: 0})
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial)
-  const queryParams = useQuery().get('page') || 1
+  const queryParams = useQuery()
+  const movieName = queryParams.get('movie') || ''
+  const pageNo = queryParams.get('page') || 1
   const onData = async () => {
     setApiStatus(apiStatusConstants.inProgress)
-
+    const API_KEY = '71463801e71b647594aee8224b542825'
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=71463801e71b647594aee8224b542825&language=en-US&page=${queryParams}`,
+        `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${movieName}&page=${pageNo}`,
       )
       console.log(response)
       if (response.ok) {
@@ -40,10 +42,10 @@ const Home = () => {
       console.error(error)
     }
   }
-  useEffect(onData, [queryParams])
+  useEffect(onData, [movieName, pageNo])
 
-  const GettingData = () =>
-    apiStatus === apiStatusConstants.failure ? (
+  const GettingData = ({condition}) =>
+    condition ? (
       <main className='grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8'>
         <div className='text-center'>
           <p className='text-7xl font-semibold text-indigo-600'>404</p>
@@ -75,25 +77,33 @@ const Home = () => {
       <>
         {apiStatus === apiStatusConstants.success ? (
           <>
-            <h1 className='text-2xl font-semibold my-2'>
-              Popular Movies and Shows
-            </h1>
-            <div className='flex flex-wrap mx-auto w-fit'>
-              {items.results.map(v => (
-                <Card key={v.id} item={v} />
-              ))}
-            </div>
-            <RangeButton
-              className='grow'
-              items={items}
-              queryParams={queryParams}
-            />
+            {items.results.length > 0 ? (
+              <>
+                <h1 className='text-2xl font-semibold my-2'>
+                  Movies and Show searched by &quot;{movieName}&quot;
+                </h1>
+                <div className='flex flex-wrap mx-auto w-fit'>
+                  {items.results.map(v => (
+                    <Card key={v.id} item={v} />
+                  ))}
+                </div>
+                <RangeButton
+                  className='grow'
+                  items={items}
+                  queryParams={pageNo}
+                />
+              </>
+            ) : (
+              <div>
+                <GettingData condition={items.results.length <= 0} />
+              </div>
+            )}
           </>
         ) : (
-          <GettingData />
+          <GettingData condition={apiStatus === apiStatusConstants.failure} />
         )}
       </>
     </div>
   )
 }
-export default Home
+export default SearchedMovies

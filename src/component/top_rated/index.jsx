@@ -1,4 +1,4 @@
-import {useLocation} from 'react-router-dom'
+import {useLocation} from 'react-router-dom/cjs/react-router-dom'
 import Loader from 'react-loader-spinner'
 import React, {useEffect, useState} from 'react'
 import RangeButton from '../rangeButtons'
@@ -16,7 +16,7 @@ const apiStatusConstants = {
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
 }
-const Home = () => {
+const TopRated = () => {
   const [items, setItems] = useState({results: [], totalPages: 0, page: 0})
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial)
   const queryParams = useQuery().get('page') || 1
@@ -25,7 +25,7 @@ const Home = () => {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=71463801e71b647594aee8224b542825&language=en-US&page=${queryParams}`,
+        `https://api.themoviedb.org/3/movie/top_rated?api_key=71463801e71b647594aee8224b542825&language=en-US&page=${queryParams}`,
       )
       console.log(response)
       if (response.ok) {
@@ -73,21 +73,21 @@ const Home = () => {
   return (
     <div className='m-auto'>
       <>
-        {apiStatus === apiStatusConstants.success ? (
+        {items.results.length > 0 ? (
           <>
             <h1 className='text-2xl font-semibold my-2'>
-              Popular Movies and Shows
+              Top Rated Movies and Shows
             </h1>
             <div className='flex flex-wrap mx-auto w-fit'>
               {items.results.map(v => (
                 <Card key={v.id} item={v} />
               ))}
+              <RangeButton
+                className='grow'
+                items={items}
+                queryParams={queryParams}
+              />
             </div>
-            <RangeButton
-              className='grow'
-              items={items}
-              queryParams={queryParams}
-            />
           </>
         ) : (
           <GettingData />
@@ -96,4 +96,4 @@ const Home = () => {
     </div>
   )
 }
-export default Home
+export default TopRated
