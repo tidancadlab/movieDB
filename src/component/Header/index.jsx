@@ -81,18 +81,11 @@ const Header = ({history}) => {
         <button
           aria-labelledby='search'
           disabled={movieName.length <= 0}
-          type='button'
-          className='bg-black text-white flex items-center justify-center group'
+          type='submit'
+          className='bg-black px-4 text-white flex items-center justify-center group'
+          onClick={() => history.push(`/search?movie=${movieName}`)}
         >
-          <Link
-            className='px-4 py-3 group-disabled:pointer-events-none'
-            to={{
-              pathname: '/search',
-              search: `movie=${movieName}`,
-            }}
-          >
-            <BsSearch />
-          </Link>
+          <BsSearch />
         </button>
       </form>
     </nav>
