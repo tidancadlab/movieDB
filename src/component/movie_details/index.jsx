@@ -51,12 +51,23 @@ const MovieDetails = () => {
       const [movieDetails, crewAndCast] = await Promise.all(
         response.map(v => v.json()),
       )
-      setMovieData(movieDetails)
-      setCrewCast(crewAndCast)
-      setApiStatus(apiStatusConstants.success)
+      console.log(movieData, crewAndCast)
+      if (crewAndCast.success !== false) {
+        setCrewCast(crewAndCast)
+        setApiStatus(apiStatusConstants.success)
+      } else {
+        setApiStatus(apiStatusConstants.failure)
+        return
+      }
+      if (movieDetails.success !== false) {
+        setMovieData(movieDetails)
+        setApiStatus(apiStatusConstants.success)
+      } else {
+        setApiStatus(apiStatusConstants.failure)
+      }
     } catch (error) {
-      setApiStatus(apiStatusConstants.failure)
       console.error(error)
+      setApiStatus(apiStatusConstants.failure)
     }
   }
   useEffect(onData, [queryParams])
