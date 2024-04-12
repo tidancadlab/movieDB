@@ -1,4 +1,4 @@
-import { BsArrowRight } from 'react-icons/bs'
+import {BsArrowRight} from 'react-icons/bs'
 import Loader from 'react-loader-spinner'
 import Card from '../Card'
 import RangeButtons from '../rangeButtons'

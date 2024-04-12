@@ -40,7 +40,6 @@ const Home = () => {
   }
   useEffect(onData, [queryParams])
 
-
   return (
     <CardContainer
       apiStatus={apiStatus}

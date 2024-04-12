@@ -14,7 +14,7 @@ const MovieDetail = ({movieData}) => (
   >
     <div className='bg-gradient-to-t from-black from-0% to-100% text-white px-10 pb-6'>
       <img
-      className='w-44 sm:w-80'
+        className='w-44 sm:w-80'
         src={
           DATA.images.secure_base_url +
           DATA.images.poster_sizes[3] +
