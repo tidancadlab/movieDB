@@ -1,56 +1,52 @@
 import React from 'react'
-import {BsFillCaretLeftFill, BsFillCaretRightFill} from 'react-icons/bs'
-import {Link} from 'react-router-dom/cjs/react-router-dom'
-import {useLocation} from 'react-router-dom/cjs/react-router-dom.min'
+import {useLocation, withRouter} from 'react-router-dom'
 
 function useQuery() {
   const {search} = useLocation()
-
   return React.useMemo(() => new URLSearchParams(search), [search])
 }
 
-const RangeButton = ({items, queryParams, className}) => (
-  <div
-    className={`flex gap-3 justify-end items-center my-4 px-2 text-white ${className}`}
-  >
-    <button
-      aria-labelledby='btn'
-      className='flex justify-center items-center group'
-      type='button'
-      disabled={items.page <= 1}
+const RangeButton = ({items, queryParams, className, history}) => {
+  const movie = useQuery().get('movie')
+  if (items.totalPages <= 1) {
+    return null
+  }
+  return (
+    <div
+      className={`flex gap-3 justify-center sm:justify-end items-center my-4 mx-10 text-white ${className}`}
     >
-      <Link
-        to={{
-          search: `page=${items.page - 1}`,
-        }}
-        className='border-2 border-white rounded p-2 group-disabled:opacity-25 group-disabled:pointer-events-none'
+      <button
+        aria-labelledby='btn'
+        className='outline rounded p-2 hover:bg-white hover:text-black disabled:hover:bg-black disabled:hover:text-white disabled:opacity-15'
+        type='button'
+        disabled={items.page <= 1}
+        onClick={() =>
+          history.push({
+            search: `${movie ? `movie=${movie}&` : ''}page=${items.page - 1}`,
+          })
+        }
       >
-        <BsFillCaretLeftFill />
-      </Link>
-    </button>
-    <p
-      aria-current={parseInt(queryParams) === items.page}
-      className='border-2 border-white rounded p-1 px-3 aria-[current=true]:bg-white aria-[current=true]:text-black'
-    >
-      {items.page}
-    </p>
-    <button
-      aria-labelledby='btn'
-      className='flex justify-center items-center group'
-      type='button'
-      disabled={items.page >= (items.totalPages > 500 ? 500 : items.totalPages)}
-    >
-      <Link
-        to={{
-          search: `${
-            useQuery().get('movie') ? `movie=${useQuery().get('movie')}&` : ''
-          }page=${items.page + 1}`,
-        }}
-        className='border-2 border-white rounded p-2 group-disabled:opacity-25 group-disabled:pointer-events-none'
+        Previous
+      </button>
+      <p aria-current={parseInt(queryParams) === items.page} className='px-2'>
+        {items.page} of {items.totalPages <= 500 ? items.totalPages : 500}
+      </p>
+      <button
+        aria-labelledby='btn'
+        className='outline rounded p-2 hover:bg-white hover:text-black disabled:hover:bg-black disabled:hover:text-white disabled:opacity-15'
+        type='button'
+        disabled={
+          items.page >= (items.totalPages > 500 ? 500 : items.totalPages)
+        }
+        onClick={() =>
+          history.push({
+            search: `${movie ? `movie=${movie}&` : ''}page=${items.page + 1}`,
+          })
+        }
       >
-        <BsFillCaretRightFill />
-      </Link>
-    </button>
-  </div>
-)
-export default RangeButton
+        Next
+      </button>
+    </div>
+  )
+}
+export default withRouter(RangeButton)

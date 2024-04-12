@@ -9,20 +9,22 @@ import MovieDetails from './component/movie_details'
 import './index.css'
 
 const App = () => (
-  <div className='relative bg-black max-w-5xl mx-auto min-h-screen flex flex-col'>
-    <Switch>
-      <ProtectedRoute exact path='/' component={Home} />
-      <ProtectedRoute exact path='/top-rated' component={TopRated} />
-      <ProtectedRoute exact path='/upcoming' component={Upcoming} />
-      <ProtectedRoute exact path='/search' component={SearchedMovies} />
-      <ProtectedRoute
-        exact
-        path='/movie-details/:id'
-        component={MovieDetails}
-      />
-      <Route exact path='/not-found' component={NotFound} />
-      <Redirect to='/not-found' />
-    </Switch>
+  <div className='bg-black select-none'>
+    <div className='relative bg-black max-w-full mx-auto min-h-screen flex flex-col'>
+      <Switch>
+        <ProtectedRoute exact path='/' component={Home} />
+        <ProtectedRoute exact path='/top-rated' component={TopRated} />
+        <ProtectedRoute exact path='/upcoming' component={Upcoming} />
+        <ProtectedRoute exact path='/search' component={SearchedMovies} />
+        <ProtectedRoute
+          exact
+          path='/movie-details/:id'
+          component={MovieDetails}
+        />
+        <Route exact path='/not-found' component={NotFound} />
+        <Redirect to='/not-found' />
+      </Switch>
+    </div>
   </div>
 )
 
