@@ -25,7 +25,6 @@ const Upcoming = () => {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/upcoming?api_key=71463801e71b647594aee8224b542825&language=en-US&page=${queryParams}`,
       )
-      console.log(response)
       if (response.ok) {
         const {results, total_pages: totalPages, page} = await response.json()
         setItems({results, totalPages, page})
@@ -35,7 +34,6 @@ const Upcoming = () => {
       }
     } catch (error) {
       setApiStatus(apiStatusConstants.failure)
-      console.error(error)
     }
   }
   useEffect(onData, [queryParams])

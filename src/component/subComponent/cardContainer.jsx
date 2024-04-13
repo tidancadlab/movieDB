@@ -1,3 +1,4 @@
+import {withRouter} from 'react-router-dom/cjs/react-router-dom.min'
 import {BsArrowRight} from 'react-icons/bs'
 import Loader from 'react-loader-spinner'
 import Card from '../Card'
@@ -11,8 +12,8 @@ const apiStatusConstants = {
 }
 
 const CardContainer = ({apiStatus, items, queryParams, history}) => {
-  const GettingData = () =>
-    apiStatus === apiStatusConstants.failure ? (
+  const GettingData = ({condition}) =>
+    condition ? (
       <main className='grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8'>
         <div className='text-center'>
           <p className='text-7xl font-semibold text-indigo-600'>404</p>
@@ -24,7 +25,7 @@ const CardContainer = ({apiStatus, items, queryParams, history}) => {
           </p>
           <div className='mt-10 flex items-center justify-center gap-x-6'>
             <button
-              onClick={history.push('/')}
+              onClick={() => history.push('/')}
               type='button'
               className='rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
             >
@@ -42,10 +43,11 @@ const CardContainer = ({apiStatus, items, queryParams, history}) => {
   return (
     <div className=''>
       <>
-        {apiStatus === apiStatusConstants.success ? (
+        {apiStatus === apiStatusConstants.success &&
+        items.results?.length > 0 ? (
           <>
             <h1 className='text-2xl flex items-center gap-3 font-semibold mb-6 mt-4 mx-4 text-white'>
-              Popular Movies and Shows <BsArrowRight />
+              Movies and Shows <BsArrowRight />
             </h1>
             <div
               className='grid 
@@ -67,11 +69,16 @@ const CardContainer = ({apiStatus, items, queryParams, history}) => {
             />
           </>
         ) : (
-          <GettingData />
+          <GettingData
+            condition={
+              apiStatus === apiStatusConstants.failure &&
+              items.results?.length <= 0
+            }
+          />
         )}
       </>
     </div>
   )
 }
 
-export default CardContainer
+export default withRouter(CardContainer)

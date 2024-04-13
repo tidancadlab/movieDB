@@ -26,7 +26,6 @@ const SearchedMovies = () => {
       const response = await fetch(
         `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${movieName}&page=${pageNo}`,
       )
-      console.log(response)
       if (response.ok) {
         const {results, total_pages: totalPages, page} = await response.json()
         setItems({results, totalPages, page})
@@ -36,7 +35,6 @@ const SearchedMovies = () => {
       }
     } catch (error) {
       setApiStatus(apiStatusConstants.failure)
-      console.error(error)
     }
   }
   useEffect(onData, [movieName, pageNo])

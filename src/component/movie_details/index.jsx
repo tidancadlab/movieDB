@@ -31,7 +31,7 @@ const apiStatusConstants = {
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
 }
-const MovieDetails = () => {
+const MovieDetails = ({history}) => {
   const {id} = useParams()
   const [movieData, setMovieData] = useState({})
   const [crewCast, setCrewCast] = useState({})
@@ -53,7 +53,6 @@ const MovieDetails = () => {
       const [movieDetails, crewAndCast] = await Promise.all(
         response.map(v => v.json()),
       )
-      console.log(movieData, crewAndCast)
       if (crewAndCast.success !== false) {
         setCrewCast(crewAndCast)
         setApiStatus(apiStatusConstants.success)
@@ -68,7 +67,6 @@ const MovieDetails = () => {
         setApiStatus(apiStatusConstants.failure)
       }
     } catch (error) {
-      console.error(error)
       setApiStatus(apiStatusConstants.failure)
     }
   }
@@ -87,7 +85,14 @@ const MovieDetails = () => {
           </p>
           <div className='mt-10 flex items-center justify-center gap-x-6'>
             <button
-              onClick={onData}
+              onClick={() => history.goBack()}
+              type='button'
+              className='rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+            >
+              Back
+            </button>
+            <button
+              onClick={() => history.push('/')}
               type='button'
               className='rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
             >

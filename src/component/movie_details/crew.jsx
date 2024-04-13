@@ -5,7 +5,7 @@ const Crew = ({crewCast, colors}) => (
     <h1 className='text-5xl font-bold mb-8'>Crew</h1>
     <div className='grid grid-cols-[repeat(auto-fill,21.3%)] sm:grid-cols-[repeat(auto-fill,14%)] lg:grid-cols-[repeat(auto-fill,10%)] gap-4 justify-between'>
       {crewCast.crew.map((v, i) => (
-        <div className='flex flex-col text-center'>
+        <div  key={v.credit_id} className='flex flex-col text-center'>
           <img
             style={{outlineColor: `${colors[i % colors.length]}`}}
             className='rounded-full aspect-square outline'
