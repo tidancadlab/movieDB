@@ -25,3 +25,4 @@ yarn-error.log*
 .vscode/
 .results
 *dev.yaml
+.fleet/settings.json

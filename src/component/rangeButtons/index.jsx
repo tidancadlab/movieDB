@@ -16,9 +16,9 @@ const RangeButton = ({items, queryParams, className, history}) => {
       className={`flex gap-3 justify-center sm:justify-end items-center my-4 mx-10 text-white ${className}`}
     >
       <button
-        aria-labelledby='btn'
-        className='outline rounded p-2 hover:bg-white hover:text-black disabled:hover:bg-black disabled:hover:text-white disabled:opacity-15'
-        type='button'
+        aria-labelledby="btn"
+        className="outline rounded p-2 hover:bg-white hover:text-black disabled:hover:bg-black disabled:hover:text-white disabled:opacity-15"
+        type="button"
         disabled={items.page <= 1}
         onClick={() =>
           history.push({
@@ -26,15 +26,15 @@ const RangeButton = ({items, queryParams, className, history}) => {
           })
         }
       >
-        Previous
+        Prev
       </button>
-      <p aria-current={parseInt(queryParams) === items.page} className='px-2'>
-        {items.page} of {items.totalPages <= 500 ? items.totalPages : 500}
+      <p aria-current={parseInt(queryParams) === items.page} className="px-2">
+        {items.page}
       </p>
       <button
-        aria-labelledby='btn'
-        className='outline rounded p-2 hover:bg-white hover:text-black disabled:hover:bg-black disabled:hover:text-white disabled:opacity-15'
-        type='button'
+        aria-labelledby="btn"
+        className="outline rounded p-2 hover:bg-white hover:text-black disabled:hover:bg-black disabled:hover:text-white disabled:opacity-15"
+        type="button"
         disabled={
           items.page >= (items.totalPages > 500 ? 500 : items.totalPages)
         }
