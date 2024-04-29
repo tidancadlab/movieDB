@@ -30,14 +30,34 @@ const Header = ({history}) => {
   const queryParams = useQuery()
   const search = queryParams.get('movie') || ''
   const [movieName, setMovieName] = useState(search)
+  const [suggestMovies, setSuggestMovies] = useState([])
   const isCurrentTab = path =>
     matchPath(history.location.pathname, {
       path,
       exact: true,
       strict: true,
     })?.isExact
+  const keywords = words => {
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MTQ2MzgwMWU3MWI2NDc1OTRhZWU4MjI0YjU0MjgyNSIsInN1YiI6IjY2MTI1ZDE1MWYzMzE5MDE3ZGMyZTQ2YyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.endEegKb0Nh5WWthi876AG8qwSIGYWEYZTrkfa-QOQE',
+      },
+    }
+
+    fetch(
+      `https://api.themoviedb.org/3/search/keyword?query=${words}&page=1`,
+      options,
+    )
+      .then(response => response.json())
+      .then(response => setSuggestMovies(response.results))
+      .catch(err => console.error(err))
+  }
   const onSearchMovie = e => {
     setMovieName(e.target.value)
+    keywords(e.target.value)
   }
   useEffect(() => {
     setMovieName(search)
@@ -75,6 +95,7 @@ const Header = ({history}) => {
           spellCheck={false}
           onChange={onSearchMovie}
           value={movieName}
+          list="searchData"
         />
         <button
           aria-labelledby="search"
@@ -85,6 +106,13 @@ const Header = ({history}) => {
         >
           Search
         </button>
+        <datalist id="searchData">
+          {suggestMovies.map(v => (
+            <option key={v.id} value={v.name}>
+              {v.expItem}
+            </option>
+          ))}
+        </datalist>
       </form>
     </nav>
   )

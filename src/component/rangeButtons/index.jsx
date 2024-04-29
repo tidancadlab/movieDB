@@ -1,5 +1,5 @@
-import React from 'react'
-import {useLocation, withRouter} from 'react-router-dom'
+import React, {useEffect} from 'react'
+import {useLocation, withRouter, Redirect} from 'react-router-dom'
 
 function useQuery() {
   const {search} = useLocation()
@@ -11,6 +11,13 @@ const RangeButton = ({items, queryParams, className, history}) => {
   if (items.totalPages <= 1) {
     return null
   }
+  useEffect(() => {
+    if (!movie) {
+      history.push({
+        search: `${movie ? `movie=${movie}&` : ''}page=1`,
+      })
+    }
+  }, [])
   return (
     <div
       className={`flex gap-3 justify-center sm:justify-end items-center my-4 mx-10 text-white ${className}`}

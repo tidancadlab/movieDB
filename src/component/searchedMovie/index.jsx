@@ -12,6 +12,7 @@ const apiStatusConstants = {
   success: 'SUCCESS',
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
+  internetError: 'INTERNET_ERROR',
 }
 const SearchedMovies = () => {
   const [items, setItems] = useState({results: [], totalPages: 0, page: 0})
@@ -24,7 +25,7 @@ const SearchedMovies = () => {
     const API_KEY = '71463801e71b647594aee8224b542825'
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${movieName}&page=${pageNo}`,
+        `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&include_adult=false&language=en-US&query=${movieName}&page=${pageNo}`,
       )
       if (response.ok) {
         const {results, total_pages: totalPages, page} = await response.json()
@@ -34,7 +35,11 @@ const SearchedMovies = () => {
         setApiStatus(apiStatusConstants.failure)
       }
     } catch (error) {
-      setApiStatus(apiStatusConstants.failure)
+      if (error.message === 'Failed to fetch') {
+        setApiStatus(apiStatusConstants.internetError)
+      } else {
+        setApiStatus(apiStatusConstants.failure)
+      }
     }
   }
   useEffect(onData, [movieName, pageNo])

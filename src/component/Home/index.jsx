@@ -13,6 +13,7 @@ const apiStatusConstants = {
   success: 'SUCCESS',
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
+  internetError: 'INTERNET_ERROR',
 }
 const Home = () => {
   const [items, setItems] = useState({results: [], totalPages: 0, page: 0})
@@ -33,7 +34,11 @@ const Home = () => {
         setApiStatus(apiStatusConstants.failure)
       }
     } catch (error) {
-      setApiStatus(apiStatusConstants.failure)
+      if (error.message === 'Failed to fetch') {
+        setApiStatus(apiStatusConstants.internetError)
+      } else {
+        setApiStatus(apiStatusConstants.failure)
+      }
     }
   }
   useEffect(onData, [queryParams])

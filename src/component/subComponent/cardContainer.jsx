@@ -9,6 +9,8 @@ const apiStatusConstants = {
   success: 'SUCCESS',
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
+
+  internetError: 'INTERNET_ERROR',
 }
 
 const CardContainer = ({apiStatus, items, queryParams, history}) => {
@@ -35,8 +37,24 @@ const CardContainer = ({apiStatus, items, queryParams, history}) => {
         </div>
       </main>
     ) : (
-      <div className="grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
-        <Loader color="white" type="Grid" />
+      <div>
+        {apiStatus === apiStatusConstants.internetError ? (
+          <div className="min-h-[calc(100vh-52px)]  flex justify-center items-center">
+            <div className="max-w-md bg-white shadow-md rounded p-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                DNS Server Error
+              </h2>
+              <p className="text-gray-600">
+                Sorry, we couldn&apos;t connect to the DNS server. Please Please
+                set your DNS on &apos;8.8.8.8 or 8.8.4.4&apos; and try again.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="min-h-[calc(100vh-52px)]  flex justify-center items-center place-items-center px-6 py-24 sm:py-32 lg:px-8">
+            <Loader color="white" type="Grid" />
+          </div>
+        )}
       </div>
     )
 
